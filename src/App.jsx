@@ -14,6 +14,12 @@ function App() {
                         color: '#FFFFF0',
                     },
                 },
+                error: {
+                    style: {
+                        background: '#0C4A6E',
+                        color: '#FFFFF0',
+                    },
+                },
             }}
         />
     </>

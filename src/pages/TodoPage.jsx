@@ -3,6 +3,9 @@ import Header from "./components/Header.jsx";
 import Task from "./components/Task.jsx";
 import Form from "./components/Form.jsx";
 import getDate from "./utils/DateUtil.js";
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import {confirmAlert} from 'react-confirm-alert';
+import {toast} from "react-hot-toast";
 
 class TodoPage extends Component {
     state = {
@@ -36,11 +39,41 @@ class TodoPage extends Component {
 
     handleDelete = (id) => {
         const filteredTodo = this.state.todos.filter(todo => todo.id !== id);
-        if (!confirm("Are you sure you want to delete it?")) return;
-        this.setState({
-            todos: filteredTodo,
-            selectedTodo: null,
+        confirmAlert({
+            customUI: ({onClose}) => {
+                return (
+                    <div className="bg-sky-950 p-6 rounded-lg shadow-lg w-full max-w-md mx-auto text-center">
+                        <h1 className="text-lg font-bold text-gray-100">Confirm to delete task</h1>
+                        <p className="my-4 text-gray-200">Are you sure you want to delete this task?</p>
+                        <div className="flex justify-center space-x-4">
+                            <button
+                                onClick={() => {
+                                    toast.success('Task Deleted');
+                                    this.setState({
+                                        todos: filteredTodo,
+                                        selectedTodo: null,
+                                    });
+                                    onClose();
+                                }}
+                                className="px-4 py-2 bg-sky-900 text-gray-100 rounded-xl hover:bg-sky-800"
+                            >
+                                Yes
+                            </button>
+                            <button
+                                onClick={() => {
+                                    toast.error('Canceled');
+                                    onClose();
+                                }}
+                                className="px-4 py-2 bg-red-500 text-gray-100 rounded-xl hover:bg-red-600"
+                            >
+                                No
+                            </button>
+                        </div>
+                    </div>
+                );
+            }
         });
+
     }
 
     handleSelect = (id) => {

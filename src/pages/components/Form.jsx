@@ -26,8 +26,6 @@ class Form extends Component {
             errorMessage = 'This field cannot be empty!';
         }
 
-
-
         this.setState((prevState) => {
             const updatedErrors = {
                 ...prevState.errors,
@@ -92,7 +90,6 @@ class Form extends Component {
             data: {
                 todo,
                 description,
-                date,
             },
             errors,
             isFormValid

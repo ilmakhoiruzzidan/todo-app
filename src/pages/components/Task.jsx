@@ -1,6 +1,7 @@
 import {Component} from 'react';
 import PropTypes from 'prop-types';
 import {TrashIcon} from "@heroicons/react/24/solid/index.js";
+import {PencilIcon} from "@heroicons/react/16/solid/index.js";
 
 class Task extends Component {
     state = {
@@ -33,7 +34,8 @@ class Task extends Component {
                         <p className={`text-sm text-gray-300 font-light`}>{description}</p>
                         <p className="text-sm text-gray-300 justify-self-end items-end">{date}</p>
                     </div>
-                    <div className="flex flex-col ">
+
+                    <div className="flex flex-col">
                         <label className="flex justify-end">
                             <input
                                 onChange={this.handleChangeDone}
@@ -42,16 +44,19 @@ class Task extends Component {
                                 checked={isDone}
                             />
                         </label>
-                        <button
-                            onClick={this.handleDelete}
-                            className="flex text-red-500 mt-4 hover:text-red-600 transition justify-end">
-                            <TrashIcon className="h-7 w-7"/>
-                        </button>
-                        <button
-                            className="mt-4 rounded-2xl px-2 py-1 bg-gray-100 text-sky-950 hover:bg-amber-800 hover:text-gray-100 transition"
-                            onClick={this.handleSelect}>
-                            Edit
-                        </button>
+                        <div className="flex flex-row mt-4 gap-2">
+                            <button
+                                onClick={this.handleDelete}
+                                className="text-red-500 hover:text-red-600 transition justify-end">
+                                <TrashIcon className="h-7 w-7"/>
+                            </button>
+                            <button
+                                className="text-amber-500 hover:text-amber-600 transition justify-end"
+                                onClick={this.handleSelect}>
+                                <PencilIcon className="h-7 w-7"/>
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             </div>
