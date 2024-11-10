@@ -45,7 +45,7 @@ class Task extends Component {
                         </label>
                         <button
                             onClick={this.handleDelete}
-                            className="flex text-red-500 mt-4 hover:outline-gray-100 transition justify-end">
+                            className="flex text-red-500 mt-4 hover:text-red-600 transition justify-end">
                             <TrashIcon className="h-7 w-7"/>
                         </button>
                         <button

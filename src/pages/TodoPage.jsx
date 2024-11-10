@@ -61,12 +61,23 @@ class TodoPage extends Component {
         });
     }
 
+    handleReset = () => {
+        this.setState({
+            selectedTodo: {
+                id: 0,
+                todo: '',
+                description: '',
+            },
+        })
+    }
+
     render() {
         return <div className="font-sans bg-sky-950 min-h-screen">
             <Header/>
             <Form
                 onSubmit={this.handleSubmit}
                 onUpdate={this.handleUpdate}
+                onReset={this.handleReset}
                 selectedTodo={this.state.selectedTodo}
                 form={this.state.form}
                 errors={this.state.errors}

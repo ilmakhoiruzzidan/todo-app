@@ -1,6 +1,7 @@
 import {Component} from 'react';
 import {PlusIcon, XMarkIcon} from "@heroicons/react/24/solid/index.js";
 import PropTypes from "prop-types";
+import {toast} from "react-hot-toast";
 
 class Form extends Component {
     state = {
@@ -19,7 +20,7 @@ class Form extends Component {
     handleChange = (e) => {
         const {name, value} = e.target;
 
-        let errorMessage = ''
+        let errorMessage = '';
 
         if (name === 'todo' && value.trim() === '') {
             errorMessage = 'This field cannot be empty!';
@@ -71,27 +72,18 @@ class Form extends Component {
 
         if (id && this.props.onUpdate) {
             this.props.onUpdate(id, todo, description);
+            toast.success("Successfully Update Task");
         } else {
             this.props.onSubmit(id, todo, description);
+            toast.success("Successfully Add New Task");
         }
 
         // buat resetnya
         this.setState({
             data: {
                 todo: '',
-                description: ''
+                description: '',
             }
-        })
-    }
-
-    handleReset = () => {
-        this.setState({
-            data: {
-                id: 0,
-                todo: '',
-                description: ''
-            },
-
         })
     }
 
@@ -139,7 +131,7 @@ class Form extends Component {
                     </div>
                     <div className="flex justify-end gap-2">
                         <button type="reset"
-                                onClick={this.handleReset}
+                                onClick={this.props.onReset}
                                 className="p-2 font-bold mt-4 rounded-full bg-gray-300 hover:bg-red-500 hover:text-gray-100 text-sky-950 transition">
                             <XMarkIcon className=" h-5 w-5"/>
                         </button>
@@ -151,13 +143,15 @@ class Form extends Component {
                     </div>
                 </form>
             </div>
-        );
+        )
+            ;
     }
 }
 
 Form.propTypes = {
     onSubmit: PropTypes.func.isRequired,
     onUpdate: PropTypes.func.isRequired,
+    onReset: PropTypes.func.isRequired,
     selectedTodo: PropTypes.object,
 }
 
