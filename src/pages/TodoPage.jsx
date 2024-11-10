@@ -2,6 +2,7 @@ import {Component} from 'react';
 import Header from "./components/Header.jsx";
 import Task from "./components/Task.jsx";
 import Form from "./components/Form.jsx";
+import getDate from "./utils/DateUtil.js";
 
 class TodoPage extends Component {
     state = {
@@ -24,7 +25,8 @@ class TodoPage extends Component {
                     {
                         id: todos.length + 1,
                         todo: todo,
-                        description: description
+                        description: description,
+                        date: getDate(),
                     }
                 ],
                 selectedTodo: null,
@@ -89,6 +91,7 @@ class TodoPage extends Component {
                         key={todo.id}
                         todo={todo.todo}
                         description={todo.description}
+                        date={todo.date}
                         onDelete={() => this.handleDelete(todo.id)}
                         onSelect={() => this.handleSelect(todo.id)}
                     />

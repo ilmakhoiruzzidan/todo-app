@@ -23,16 +23,15 @@ class Task extends Component {
 
     render() {
         const {isDone} = this.state;
-        const {id, todo, description} = this.props;
+        const {id, todo, description, date} = this.props;
         return (
             <div className="flex py-4 justify-center bg-sky-950 w-full" key={id}>
                 <div
                     className={`flex p-4 text-gray-100 cursor-pointer transition justify-between shadow-md rounded-xl w-96 ${isDone ? `bg-gradient-to-r from-gray-900 to-sky-900` : `bg-sky-900`}`}>
-                    <div className="flex flex-col">
-                        <span
-                            className={`text-2xl font-semibold ${isDone ? `line-through` : ``} `}>{todo}</span>
-                        <span
-                            className={`text-sm text-gray-300 font-light`}>{description}</span>
+                    <div className="flex flex-wrap flex-col w-full">
+                        <p className={`text-2xl font-semibold ${isDone ? `line-through` : ``} `}>{todo}</p>
+                        <p className={`text-sm text-gray-300 font-light`}>{description}</p>
+                        <p className="text-sm text-gray-300 justify-self-end items-end">{date}</p>
                     </div>
                     <div className="flex flex-col ">
                         <label className="flex justify-end">
@@ -66,6 +65,7 @@ Task.propTypes = {
     id: PropTypes.number.isRequired,
     todo: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
+    date: PropTypes.string,
     onDelete: PropTypes.func.isRequired,
     onSelect: PropTypes.func,
 }

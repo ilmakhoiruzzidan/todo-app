@@ -22,13 +22,11 @@ class Form extends Component {
 
         let errorMessage = '';
 
-        if (name === 'todo' && value.trim() === '') {
+        if (name === 'todo' && name === 'description' && value.trim() === '') {
             errorMessage = 'This field cannot be empty!';
         }
 
-        if (name === 'description' && value.trim() === '') {
-            errorMessage = 'This field cannot be empty!';
-        }
+
 
         this.setState((prevState) => {
             const updatedErrors = {
@@ -73,6 +71,7 @@ class Form extends Component {
         if (id && this.props.onUpdate) {
             this.props.onUpdate(id, todo, description);
             toast.success("Successfully Update Task");
+
         } else {
             this.props.onSubmit(id, todo, description);
             toast.success("Successfully Add New Task");
@@ -83,7 +82,8 @@ class Form extends Component {
             data: {
                 todo: '',
                 description: '',
-            }
+            },
+            isFormValid: false,
         })
     }
 
@@ -91,7 +91,8 @@ class Form extends Component {
         const {
             data: {
                 todo,
-                description
+                description,
+                date,
             },
             errors,
             isFormValid
