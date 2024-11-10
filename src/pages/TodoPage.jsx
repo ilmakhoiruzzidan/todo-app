@@ -11,7 +11,8 @@ class TodoPage extends Component {
             todo: '',
             description: '',
             isDone: false
-        }
+        },
+        selectedTodo: null,
     }
 
     handleSubmit = (id, todo, description) => {
@@ -25,22 +26,39 @@ class TodoPage extends Component {
                         todo: todo,
                         description: description
                     }
-                ]
+                ],
+                selectedTodo: null,
             }
         })
-
     }
 
     handleDelete = (id) => {
-        const updatedTodos = this.state.todos.filter(todo => todo.id !== id);
+        const filteredTodo = this.state.todos.filter(todo => todo.id !== id);
         if (!confirm("Are you sure you want to delete it?")) return;
         this.setState({
-            todos: updatedTodos,
-        })
+            todos: filteredTodo,
+            selectedTodo: null,
+        });
     }
 
-    handleUpdate = (e) => {
-        console.log(e.target)
+    handleSelect = (id) => {
+        const selectedTodo = this.state.todos.find(todo => todo.id === id);
+        this.setState({selectedTodo});
+    }
+
+    handleUpdate = (id, newTodo, newDescription) => {
+        this.setState((prevState) => {
+            const updatedTodos = prevState.todos.map(todo =>
+                todo.id === id ? {
+                    ...todo,
+                    todo: newTodo,
+                    description: newDescription,
+                } : todo);
+            return {
+                todos: updatedTodos,
+                selectedTask: null,
+            }
+        });
     }
 
     render() {
@@ -48,18 +66,20 @@ class TodoPage extends Component {
             <Header/>
             <Form
                 onSubmit={this.handleSubmit}
+                onUpdate={this.handleUpdate}
+                selectedTodo={this.state.selectedTodo}
                 form={this.state.form}
                 errors={this.state.errors}
             />
             <div className="task-list">
-                {this.state.todos.map((task) => (
+                {this.state.todos.map((todo) => (
                     <Task
-                        id={task.id}
-                        key={task.id}
-                        todo={task.todo}
-                        description={task.description}
-                        onDelete={() => this.handleDelete(task.id)}
-                        onUpdate={this.handleUpdate}
+                        id={todo.id}
+                        key={todo.id}
+                        todo={todo.todo}
+                        description={todo.description}
+                        onDelete={() => this.handleDelete(todo.id)}
+                        onSelect={() => this.handleSelect(todo.id)}
                     />
                 ))}
             </div>

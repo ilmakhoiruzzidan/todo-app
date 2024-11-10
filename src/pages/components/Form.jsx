@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 
 class Form extends Component {
     state = {
-        note: {
-            id: new Date().toISOString(),
+        data: {
+            id: 0,
             todo: '',
             description: '',
         },
@@ -38,8 +38,8 @@ class Form extends Component {
             const updatedFormValid = Object.values(updatedErrors).every(error => error === '');
 
             return {
-                note: {
-                    ...prevState.note,
+                data: {
+                    ...prevState.data,
                     [name]: value,
                 },
                 errors: updatedErrors,
@@ -48,17 +48,56 @@ class Form extends Component {
         });
     }
 
+    componentDidUpdate(prevProps) {
+        if (prevProps.selectedTodo !== this.props.selectedTodo) {
+            this.setState({
+                data: this.props.selectedTodo || {id: 0, todo: '', description: ''},
+            });
+        }
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.selectedTodo && nextProps.selectedTodo.id !== prevState.data.id) {
+            return {
+                data: nextProps.selectedTodo
+            };
+        }
+        return null;
+    }
+
     handleAddTodo = (e) => {
         e.preventDefault();
+        const {id, todo, description} = this.state.data;
 
-        const {id, todo, description} = this.state.note;
+        if (id && this.props.onUpdate) {
+            this.props.onUpdate(id, todo, description);
+        } else {
+            this.props.onSubmit(id, todo, description);
+        }
 
-        this.props.onSubmit(id, todo, description);
+        // buat resetnya
+        this.setState({
+            data: {
+                todo: '',
+                description: ''
+            }
+        })
+    }
+
+    handleReset = () => {
+        this.setState({
+            data: {
+                id: 0,
+                todo: '',
+                description: ''
+            },
+
+        })
     }
 
     render() {
         const {
-            note: {
+            data: {
                 todo,
                 description
             },
@@ -66,13 +105,7 @@ class Form extends Component {
             isFormValid
         } = this.state;
         return (
-            <div className="flex flex-col items-center py-4 justify-center bg-sky-950 w-full">
-                <div className="flex pb-4">
-                    <button
-                        className="py-3 px-4 shadow-xl hover:bg-sky-900 hover:text-gray-100 bg-gray-300 text-sky-950 transition rounded-3xl">
-                        Create new Task
-                    </button>
-                </div>
+            <div className="flex items-center py-4 justify-center bg-sky-950 w-full">
                 <form onSubmit={this.handleAddTodo} className="p-4 bg-sky-900 shadow-lg rounded-xl w-96">
                     <div className="flex flex-col text-gray-100 gap-2">
                         <label htmlFor="todo" className="flex flex-col gap-2">
@@ -106,6 +139,7 @@ class Form extends Component {
                     </div>
                     <div className="flex justify-end gap-2">
                         <button type="reset"
+                                onClick={this.handleReset}
                                 className="p-2 font-bold mt-4 rounded-full bg-gray-300 hover:bg-red-500 hover:text-gray-100 text-sky-950 transition">
                             <XMarkIcon className=" h-5 w-5"/>
                         </button>
@@ -123,6 +157,8 @@ class Form extends Component {
 
 Form.propTypes = {
     onSubmit: PropTypes.func.isRequired,
+    onUpdate: PropTypes.func.isRequired,
+    selectedTodo: PropTypes.object,
 }
 
 export default Form;

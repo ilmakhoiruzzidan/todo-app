@@ -1,7 +1,6 @@
 import {Component} from 'react';
 import PropTypes from 'prop-types';
 import {TrashIcon} from "@heroicons/react/24/solid/index.js";
-import log from "eslint-plugin-react/lib/util/log.js";
 
 class Task extends Component {
     state = {
@@ -18,19 +17,17 @@ class Task extends Component {
         this.props.onDelete(this.props.id);
     }
 
-    handleUpdate = () => {
-        console.log('Ini kepanggil')
-        this.props.onUpdate(this.props.id);
+    handleSelect = () => {
+        this.props.onSelect(this.props.id);
     }
-
 
     render() {
         const {isDone} = this.state;
         const {id, todo, description} = this.props;
         return (
             <div className="flex py-4 justify-center bg-sky-950 w-full" key={id}>
-                <div onClick={this.handleUpdate}
-                    className={`flex p-4 text-gray-100 justify-between shadow-lg rounded-xl w-96 ${isDone ? `bg-gradient-to-r from-gray-900 to-sky-900` : `bg-sky-900`}`}>
+                <div
+                    className={`flex p-4 text-gray-100 cursor-pointer transition justify-between shadow-md rounded-xl w-96 ${isDone ? `bg-gradient-to-r from-gray-900 to-sky-900` : `bg-sky-900`}`}>
                     <div className="flex flex-col">
                         <span
                             className={`text-2xl font-semibold ${isDone ? `line-through` : ``} `}>{todo}</span>
@@ -51,6 +48,11 @@ class Task extends Component {
                             className="flex text-red-500 mt-4 hover:outline-gray-100 transition justify-end">
                             <TrashIcon className="h-7 w-7"/>
                         </button>
+                        <button
+                            className="mt-4 rounded-2xl px-2 py-1 bg-gray-100 text-sky-950 hover:bg-amber-800 hover:text-gray-100 transition"
+                            onClick={this.handleSelect}>
+                            Edit
+                        </button>
                     </div>
                 </div>
             </div>
@@ -65,7 +67,7 @@ Task.propTypes = {
     todo: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     onDelete: PropTypes.func.isRequired,
-    onUpdate: PropTypes.func.isRequired
+    onSelect: PropTypes.func,
 }
 
 export default Task;
